@@ -1,4 +1,4 @@
-package ro.zizicu.nwbase.impl;
+package ro.zizicu.nwbase.service.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,15 +13,15 @@ import ro.zizicu.nwbase.entity.IdentityOwner;
 import ro.zizicu.nwbase.service.CrudService;
 
 
-public class CrudServiceImpl<Repository extends CrudRepository<Entity, ID>, 
-							   Entity extends IdentityOwner<ID>, 
-							   ID extends Serializable> 
+public class CrudServiceImpl<Entity extends IdentityOwner<ID>, 
+							  ID extends Serializable> 
 	implements CrudService<Entity, ID>
 
 {
 	private static Logger logger = LoggerFactory.getLogger(CrudServiceImpl.class);
+	
 	@Autowired
-	protected Repository repository;
+	protected CrudRepository<Entity, ID> repository;
 
 	@Override
 	public void delete(Entity entity) {

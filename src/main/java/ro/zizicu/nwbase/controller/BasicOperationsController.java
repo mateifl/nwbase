@@ -19,13 +19,12 @@ import ro.zizicu.nwbase.service.CrudService;
 
 
 public class BasicOperationsController<Entity extends IdentityOwner<ID>, 
-										ID extends Serializable,
-										Service extends CrudService<Entity, ID>> {
+										ID extends Serializable> {
 	
 	private static Logger logger = LoggerFactory.getLogger(BasicOperationsController.class);
 	
 	@Autowired
-	protected Service service;
+	protected CrudService<Entity, ID> service;
 
 	@GetMapping(value = "/")
 	public ResponseEntity<?> loadAll()
