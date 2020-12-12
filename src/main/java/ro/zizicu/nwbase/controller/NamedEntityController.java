@@ -23,7 +23,7 @@ public class NamedEntityController<Entity extends NamedIdentityOwner<ID>,
 	
 	@GetMapping(value = "name/{name}")
 	public ResponseEntity<?> findByName(@PathVariable String name) {
-		logger.debug("find category: " + name);
+		logger.debug("find: " + name);
 		try {
 			return ResponseEntity.ok(namedService.loadByName(name));
 		}

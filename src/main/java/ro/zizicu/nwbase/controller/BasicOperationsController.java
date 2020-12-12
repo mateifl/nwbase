@@ -6,9 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,7 +45,7 @@ public class BasicOperationsController<Entity extends IdentityOwner<ID>,
 		catch(EntityNotFoundException e) {
 			String errorMessage = "entity not found, id:" + id;
 			logger.error(errorMessage);
-			return ResponseEntity.badRequest().body(errorMessage);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorMessage);
 		}
 	}
 	
@@ -67,7 +69,7 @@ public class BasicOperationsController<Entity extends IdentityOwner<ID>,
 			logger.debug("create entity " + entity);
 			Entity e = service.create(entity);
 			HttpHeaders responseHeaders = new HttpHeaders();
-			responseHeaders.add("Location", "categories/" + e.getId());
+			responseHeaders.add("Location", getLocation() + e.getId());
 			return ResponseEntity.ok().headers(responseHeaders).body(e);
 		}
 		catch (Exception e) {
@@ -75,6 +77,24 @@ public class BasicOperationsController<Entity extends IdentityOwner<ID>,
 			logger.error(errorMessage, e);
 			return ResponseEntity.badRequest().body(errorMessage);
 		}
+	}
+	
+	@PatchMapping(value = "/{id}") 
+	public ResponseEntity<?> update(@PathVariable ID id, @RequestBody Entity entity) {
+		logger.debug("update category id: " + id);
+		entity.setId(id);
+		try {
+			return ResponseEntity.ok(service.update(entity));
+		}
+		catch (Exception e) {
+			String errorMessage = e.getMessage();
+			logger.error(errorMessage, e);
+			return ResponseEntity.badRequest().body(errorMessage);
+		}
+	}
+	
+	protected String getLocation() {
+		return "";
 	}
 }
 

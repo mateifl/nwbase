@@ -22,5 +22,4 @@ public class NamedServiceImpl<Entity extends NamedIdentityOwner<ID>,
 	public List<Entity> loadByName(String name) {
 		return namedRepository.findByName(name);
 	}
-
 }
