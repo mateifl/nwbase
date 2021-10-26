@@ -28,6 +28,10 @@ public class BasicOperationsController<Entity extends IdentityOwner<ID>,
 	@Autowired
 	protected CrudService<Entity, ID> service;
 
+	public void setCrudService(CrudService<Entity, ID> service) {
+		this.service = service;
+	}
+	
 	@GetMapping(value = "/")
 	public ResponseEntity<?> loadAll()
 	{
