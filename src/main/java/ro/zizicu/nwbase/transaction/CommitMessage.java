@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommitMessage {
-
     private String microservice;
-    private Integer transactionId;
-
+    private Long transactionId;
 }

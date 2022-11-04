@@ -11,11 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TransactionMessage {
-
     private String serviceName;
-    private Integer transactionId;
+    private Long transactionId;
     private Boolean isSuccessful;
     private Boolean isLastStep;
-
-
 }
