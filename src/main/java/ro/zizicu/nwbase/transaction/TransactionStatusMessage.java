@@ -14,5 +14,4 @@ public class TransactionStatusMessage {
     private Long transactionId;
     private TransactionStatus status;
 
-
 }
