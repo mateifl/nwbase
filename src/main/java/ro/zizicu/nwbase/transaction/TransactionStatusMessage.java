@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class TransactionStatusMessage {
 
     private Long transactionId;
-    private TransactionStatus status;
+    private DistributedTransactionStatus status;
 
 }

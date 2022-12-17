@@ -6,10 +6,10 @@ import javax.persistence.Converter;
 import java.util.stream.Stream;
 
 @Converter(autoApply = true)
-public class TransactionStatusConverter implements AttributeConverter<TransactionStatus, String> {
+public class TransactionStatusConverter implements AttributeConverter<DistributedTransactionStatus, String> {
 
     @Override
-    public String convertToDatabaseColumn(TransactionStatus status) {
+    public String convertToDatabaseColumn(DistributedTransactionStatus status) {
         if (status == null) {
             return null;
         }
@@ -17,12 +17,12 @@ public class TransactionStatusConverter implements AttributeConverter<Transactio
     }
 
     @Override
-    public TransactionStatus convertToEntityAttribute(String code) {
+    public DistributedTransactionStatus convertToEntityAttribute(String code) {
         if (code == null) {
             return null;
         }
 
-        return Stream.of(TransactionStatus.values())
+        return Stream.of(DistributedTransactionStatus.values())
                 .filter(c -> c.getStatus().equals(code))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);

@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ro.zizicu.nwbase.transaction.TransactionMessage;
-import ro.zizicu.nwbase.transaction.TransactionStatus;
+import ro.zizicu.nwbase.transaction.DistributedTransactionStatus;
 import ro.zizicu.nwbase.transaction.TransactionStatusMessage;
 
 @Slf4j
@@ -18,14 +18,14 @@ public class DefaultTransactionCoordinatorRestClient implements TransactionCoord
     private final RestTemplate restTemplate;
     
     @Override
-    public void sendTransactionStepStatus(Long transactionId, TransactionStatus status) {
+    public void sendTransactionStepStatus(Boolean lastStep, Boolean successful, Long transactionId, DistributedTransactionStatus status) {
     	
         String transactionCoordinatorUrl = environment.getProperty("transactionCoordinator.url");
         log.debug("send transaction step info to {} for transaction id {}", transactionCoordinatorUrl  , transactionId);
         TransactionMessage transactionMessage = TransactionMessage.builder()
-        		.isLastStep(false)
+        		.isLastStep(lastStep)
         		.transactionId(transactionId)
-        		.isSuccessful(true)
+        		.isSuccessful(successful)
         		.serviceName("product")
         		.build();
         HttpEntity<TransactionMessage> updatedEntity = new HttpEntity<TransactionMessage>(transactionMessage);

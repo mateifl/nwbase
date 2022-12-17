@@ -1,6 +1,6 @@
 package ro.zizicu.nwbase.transaction;
 
-public enum TransactionStatus {
+public enum DistributedTransactionStatus {
 
     UNCOMMITED("UNCOMMITED"),
     READY_TO_COMMIT("READY_TO_COMMIT"),
@@ -9,7 +9,7 @@ public enum TransactionStatus {
 
     private String status;
 
-    private TransactionStatus(String code) {
+    private DistributedTransactionStatus(String code) {
         this.status = code;
     }
 
