@@ -4,21 +4,21 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.web.client.RestTemplate;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ro.zizicu.nwbase.transaction.TransactionMessage;
 import ro.zizicu.nwbase.transaction.DistributedTransactionStatus;
+import ro.zizicu.nwbase.transaction.TransactionMessage;
 import ro.zizicu.nwbase.transaction.TransactionStatusMessage;
 
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DefaultTransactionCoordinatorRestClient implements TransactionCoordinatorRestClient {
 
     private final Environment environment;
     private final RestTemplate restTemplate;
     
     @Override
-    public void sendTransactionStepStatus(Boolean lastStep, Boolean successful, Long transactionId, DistributedTransactionStatus status) {
+    public void sendTransactionStepStatus(Boolean lastStep, Boolean successful, Long transactionId, DistributedTransactionStatus status, String serviceName) {
     	
         String transactionCoordinatorUrl = environment.getProperty("transactionCoordinator.url");
         log.debug("send transaction step info to {} for transaction id {}", transactionCoordinatorUrl  , transactionId);
@@ -26,7 +26,7 @@ public class DefaultTransactionCoordinatorRestClient implements TransactionCoord
         		.isLastStep(lastStep)
         		.transactionId(transactionId)
         		.isSuccessful(successful)
-        		.serviceName("product")
+        		.serviceName(serviceName)
         		.build();
         HttpEntity<TransactionMessage> updatedEntity = new HttpEntity<TransactionMessage>(transactionMessage);
         restTemplate.postForObject(transactionCoordinatorUrl + "/",

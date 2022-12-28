@@ -1,9 +1,6 @@
 package ro.zizicu.nwbase.transaction.support;
 
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import javax.persistence.EntityManager;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -16,30 +13,30 @@ import ro.zizicu.nwbase.transaction.DistributedTransactionStatus;
 @Slf4j
 public class DefaultTransactionStepExecutor  {
 
-    private final PlatformTransactionManager transactionManager;
+	private final EntityManager entityManager;
     private final TransactionCoordinatorRestClient restClient;
-    private TransactionStatus transactionStatus;
 
     public void executeOnDatabase(TransactionStep transactionStep, Long transactionId) {
-        log.debug("executing transaction {}", transactionId);
-        DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
-        definition.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-        definition.setTimeout(3);
-        transactionStatus = getTransactionManager().getTransaction(definition);
+    	entityManager.getTransaction().begin();
+        log.debug("executing transaction {} service {}", transactionId, transactionStep.getServiceName());
+        transactionStep.setEntityManager(entityManager);
         transactionStep.execute();
-        restClient.sendTransactionStepStatus(transactionStep.lastStep(), Boolean.TRUE,  transactionId, DistributedTransactionStatus.READY_TO_COMMIT);
+        restClient.sendTransactionStepStatus(transactionStep.lastStep(), Boolean.TRUE,  transactionId, DistributedTransactionStatus.READY_TO_COMMIT, transactionStep.getServiceName());
         log.debug("transaction step {} executed", transactionId);
     }
 
     public void commit(Long transactionId) {
         log.debug("committing transaction {}", transactionId);
-        transactionManager.commit(transactionStatus);
+        entityManager.flush();
+        entityManager.getTransaction().commit();
+        entityManager.close();
         log.debug("transaction {} committed", transactionId);
     }
 
     public void rollback(Long transactionId) {
         log.debug("rollback transaction {}", transactionId);
-        transactionManager.rollback(transactionStatus);
+        entityManager.getTransaction().rollback();
+        entityManager.close();
         log.debug("transaction {} rolled back", transactionId);
     }
 
@@ -48,7 +45,7 @@ public class DefaultTransactionStepExecutor  {
 		try {
 			while (true) {
 				Thread.sleep(10);
-				if(counter % 100 == 0)
+				if(counter % 25 == 0)
 					log.debug("checking transaction status {}", transactionId);
 				DistributedTransactionStatus transactionStatus = restClient.getDistributedTransactionStatus(transactionId).getStatus();
 				
@@ -56,7 +53,7 @@ public class DefaultTransactionStepExecutor  {
 					return transactionStatus;
 				}
 				counter += 1;
-				if (counter == 1000)
+				if (counter == 100)
 				{
 					log.debug("end polling, transaction rollback");
 					return DistributedTransactionStatus.ROLLEDBACK;

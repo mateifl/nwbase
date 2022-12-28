@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 
+import lombok.extern.slf4j.Slf4j;
 import ro.zizicu.nwbase.entity.IdentityOwner;
 import ro.zizicu.nwbase.exceptions.EntityNotFoundException;
 import ro.zizicu.nwbase.service.CrudService;
@@ -27,13 +25,13 @@ public class CrudServiceImpl<Entity extends IdentityOwner<ID>,
 
 	@Override
 	public void delete(Entity entity) {
-		if(log.isInfoEnabled()) log.info("delete: " + entity.getClass().getName() + " id " + entity.getId());
+		if(log.isInfoEnabled()) log.info("delete: {} id {}", entity.getClass().getName(), entity.getId());
 		repository.delete(entity);
 	}
 	
 	@Override
 	public Entity create(Entity entity) {
-		if(log.isInfoEnabled()) log.info("create: " + entity.getClass().getName() + " id " + entity.getId());
+		if(log.isInfoEnabled()) log.info("create: {} id {}", entity.getClass().getName(), entity.getId());
 		return repository.save(entity);
 	}
 	
@@ -41,16 +39,13 @@ public class CrudServiceImpl<Entity extends IdentityOwner<ID>,
 	public List<Entity> loadAll() {
 		if(log.isInfoEnabled()) log.info("load all entities");
 		List<Entity> entities = new ArrayList<>();
-		
-		for(Entity e : repository.findAll())
-			entities.add(e);
-		
+		repository.findAll().forEach(entities::add);
 		return entities;
 	}
 	
 	@Override
 	public Entity load(ID id) {
-		if(log.isInfoEnabled()) log.info("load entity with id " + id);
+		if(log.isInfoEnabled()) log.info("load entity with id {}", id);
 		Optional<Entity> entity = repository.findById(id);
 		if(entity.isEmpty()) {
 			log.info("entity with id {} not found", id);
@@ -62,7 +57,7 @@ public class CrudServiceImpl<Entity extends IdentityOwner<ID>,
 
 	@Override
 	public Entity update(Entity entity) {
-		if(log.isInfoEnabled()) log.info("update: " + entity.getClass().getName() + " id " + entity.getId());
+		if(log.isInfoEnabled()) log.info("update: {} id {}", entity.getClass().getName(), entity.getId());
 		return repository.save(entity);
 	}
 }
