@@ -10,6 +10,11 @@ import ro.zizicu.nwbase.entity.NamedIdentityOwner;
 import ro.zizicu.nwbase.service.NamedService;
 
 
+/**
+ * TODO this is too coupled design.
+ * @param <Entity>
+ * @param <ID>
+ */
 public class NamedServiceImpl<Entity extends NamedIdentityOwner<ID>,
 								   ID extends Serializable> 
 	extends CrudServiceImpl<Entity, ID>

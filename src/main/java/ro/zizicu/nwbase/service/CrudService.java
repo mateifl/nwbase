@@ -1,12 +1,18 @@
 package ro.zizicu.nwbase.service;
 
+import ro.zizicu.nwbase.entity.IdentityOwner;
+
 import java.io.Serializable;
 import java.util.List;
 
-public interface CrudService<Entity, ID extends Serializable> {
+/**
+ * Role: expose a CRUD REST API for entities that do not need a data transfer object.
+ * @param <Entity>
+ * @param <ID>
+ */
+public interface CrudService<Entity extends IdentityOwner<ID>, ID extends Serializable> {
 	Entity load(ID id);
 	List<Entity> loadAll();
 	Entity create(Entity entity);
-	Entity update(Entity entity);
 	void delete(Entity entity);
 }

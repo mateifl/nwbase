@@ -18,13 +18,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import ro.zizicu.nwbase.entity.IdentityOwner;
 import ro.zizicu.nwbase.exceptions.EntityNotFoundException;
 import ro.zizicu.nwbase.service.CrudService;
+import ro.zizicu.nwbase.service.LoaderService;
 
 
 @Slf4j
 @Data
 public class BasicOperationsController<Entity extends IdentityOwner<ID>, 
 										ID extends Serializable> {
+
 	private final CrudService<Entity, ID> service;
+
 
 	public BasicOperationsController(CrudService<Entity, ID> service) {
 		this.service = service;
@@ -80,21 +83,7 @@ public class BasicOperationsController<Entity extends IdentityOwner<ID>,
 			return ResponseEntity.badRequest().body(errorMessage);
 		}
 	}
-	
-	@PatchMapping(value = "/{id}") 
-	public ResponseEntity<?> update(@PathVariable ID id, @RequestBody Entity entity) {
-		log.debug("update {} with id {}", entity.getEntityName(), id);
-		entity.setId(id);
-		try {
-			return ResponseEntity.ok(service.update(entity));
-		}
-		catch (Exception e) {
-			String errorMessage = e.getMessage();
-			log.error(errorMessage, e);
-			return ResponseEntity.badRequest().body(errorMessage);
-		}
-	}
-	
+
 	protected String getLocation() {
 		return "";
 	}

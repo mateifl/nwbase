@@ -21,7 +21,6 @@ public class CrudServiceImpl<Entity extends IdentityOwner<ID>,
 	implements CrudService<Entity, ID>
 
 {
-
 	@Autowired
 	protected CrudRepository<Entity, ID> repository;
 
@@ -30,27 +29,27 @@ public class CrudServiceImpl<Entity extends IdentityOwner<ID>,
 		if(log.isInfoEnabled()) log.info("delete: " + entity.getClass().getName() + " id " + entity.getId());
 		repository.delete(entity);
 	}
-	
+
 	@Override
 	public Entity create(Entity entity) {
-		if(log.isInfoEnabled()) log.info("create: " + entity.getClass().getName() + " id " + entity.getId());
+		if(log.isInfoEnabled()) log.info("create {} id {}", entity.getClass().getName(), entity.getId());
 		return repository.save(entity);
 	}
-	
+
 	@Override
 	public List<Entity> loadAll() {
 		if(log.isInfoEnabled()) log.info("load all entities");
 		List<Entity> entities = new ArrayList<>();
-		
+
 		for(Entity e : repository.findAll())
 			entities.add(e);
-		
+
 		return entities;
 	}
-	
+
 	@Override
 	public Entity load(ID id) {
-		if(log.isInfoEnabled()) log.info("load entity with id " + id);
+		if(log.isInfoEnabled()) log.info("load entity with id {}", id);
 		Optional<Entity> entity = repository.findById(id);
 		if(entity.isEmpty()) {
 			log.info("entity with id {} not found", id);
@@ -59,10 +58,4 @@ public class CrudServiceImpl<Entity extends IdentityOwner<ID>,
 		return entity.get();
 	}
 
-
-	@Override
-	public Entity update(Entity entity) {
-		if(log.isInfoEnabled()) log.info("update: " + entity.getClass().getName() + " id " + entity.getId());
-		return repository.save(entity);
-	}
 }
