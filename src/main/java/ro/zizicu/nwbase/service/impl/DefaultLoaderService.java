@@ -3,7 +3,7 @@ package ro.zizicu.nwbase.service.impl;
 import org.springframework.data.repository.CrudRepository;
 import ro.zizicu.nwbase.entity.IdentityOwner;
 import ro.zizicu.nwbase.service.converter.DtoConverter;
-import ro.zizicu.nwbase.service.LoaderService;
+import ro.zizicu.nwbase.service.DTOService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,11 +23,7 @@ public class DefaultLoaderService<Repository extends CrudRepository<Entity, ID>,
                                     Entity extends IdentityOwner<ID>,
                                     DTO extends IdentityOwner<ID>,
                                     ID extends Serializable>
-            implements LoaderService<Repository,
-                                     Converter,
-                                     Entity,
-                                     DTO,
-                                     ID>
+            implements DTOService<DTO, ID>
 {
 
     private Repository repository;
