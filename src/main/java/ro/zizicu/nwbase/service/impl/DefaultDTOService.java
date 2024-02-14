@@ -18,7 +18,7 @@ import java.util.List;
  * @param <ID>
  */
 
-public class DefaultLoaderService<Repository extends CrudRepository<Entity, ID>,
+public class DefaultDTOService<Repository extends CrudRepository<Entity, ID>,
                                     Converter extends DtoConverter<Entity, DTO, ID>,
                                     Entity extends IdentityOwner<ID>,
                                     DTO extends IdentityOwner<ID>,

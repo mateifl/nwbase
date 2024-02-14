@@ -11,7 +11,7 @@ import ro.zizicu.nwbase.service.NamedService;
 
 
 /**
- * TODO this is too coupled design.
+ *
  * @param <Entity>
  * @param <ID>
  */

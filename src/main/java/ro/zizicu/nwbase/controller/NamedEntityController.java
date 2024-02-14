@@ -13,9 +13,9 @@ import ro.zizicu.nwbase.entity.NamedIdentityOwner;
 import ro.zizicu.nwbase.service.NamedService;
 
 @Slf4j
-public class NamedEntityController<Entity extends NamedIdentityOwner<ID>,
+public abstract class NamedEntityController<Entity extends NamedIdentityOwner<ID>,
 									ID extends Serializable> 
-			  extends BasicOperationsController<Entity, ID> {
+			  extends CrudOperationsController<Entity, ID> {
 
 
 	private final NamedService<Entity, ID> namedService;
