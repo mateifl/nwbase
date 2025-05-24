@@ -33,7 +33,7 @@ public abstract class DTOController<DTO extends IdentityOwner<ID>, ID extends Se
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> load(@PathVariable ID id) {
         try {
-            log.debug("load entity " + id);
+            log.debug("load entity {}", id);
             return ResponseEntity.ok(dtoService.load(id));
         }
         catch(EntityNotFoundException e) {
