@@ -27,7 +27,7 @@ public abstract class NamedEntityController<Entity extends NamedIdentityOwner<ID
 
 	@GetMapping(value = "name/{name}")
 	public ResponseEntity<?> findByName(@PathVariable String name) {
-		log.debug("find: " + name);
+        log.debug("find: {}", name);
 		try {
 			return ResponseEntity.ok(namedService.loadByName(name));
 		}
