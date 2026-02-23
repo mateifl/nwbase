@@ -3,6 +3,7 @@ package ro.zizicu.nwbase.controller;
 import java.io.Serializable;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpHeaders;
@@ -21,15 +22,11 @@ import ro.zizicu.nwbase.service.CrudService;
 
 @Slf4j
 @Data
+@RequiredArgsConstructor
 public abstract class CrudOperationsController<Entity extends IdentityOwner<ID>,
 										ID extends Serializable> {
 
 	private final CrudService<Entity, ID> service;
-
-
-	public CrudOperationsController(CrudService<Entity, ID> service) {
-		this.service = service;
-	}
 
 	@GetMapping(value = "/")
 	public ResponseEntity<?> loadAll()
@@ -42,7 +39,7 @@ public abstract class CrudOperationsController<Entity extends IdentityOwner<ID>,
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<?> load(@PathVariable ID id) {
 		try {
-			log.debug("load entity " + id);
+            log.debug("load entity {}", id);
 			return ResponseEntity.ok(service.load(id));
 		}
 		catch(EntityNotFoundException e) {
@@ -55,7 +52,7 @@ public abstract class CrudOperationsController<Entity extends IdentityOwner<ID>,
 	@DeleteMapping(value="/")
 	public ResponseEntity<?> delete(@RequestBody Entity entity) {
 		try {
-			log.debug("delete entity " + entity.getId());
+            log.debug("delete entity {}", entity.getId());
 			service.delete(entity);
 			return ResponseEntity.ok("deleted");
 		}
@@ -69,7 +66,7 @@ public abstract class CrudOperationsController<Entity extends IdentityOwner<ID>,
 	@PostMapping(value = "/")
 	public ResponseEntity<?> create(@RequestBody Entity entity) {
 		try {
-			log.debug("create entity " + entity);
+            log.debug("create entity {}", entity);
 			Entity e = service.create(entity);
 			HttpHeaders responseHeaders = new HttpHeaders();
 			responseHeaders.add("Location", getLocation() + e.getId());
