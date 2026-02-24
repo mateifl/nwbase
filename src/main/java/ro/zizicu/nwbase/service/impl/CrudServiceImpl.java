@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
 
@@ -25,8 +23,12 @@ public class CrudServiceImpl<Entity extends IdentityOwner<ID>,
 	protected CrudRepository<Entity, ID> repository;
 
 	@Override
-	public void delete(Entity entity) {
-		if(log.isInfoEnabled()) log.info("delete: " + entity.getClass().getName() + " id " + entity.getId());
+	public void delete(ID id) {
+		Entity entity = repository.findById(id).orElse(null);
+		if(log.isInfoEnabled()) {
+            assert entity != null;
+            log.info("delete: {} id {}", entity.getClass().getName(), entity.getId());
+        }
 		repository.delete(entity);
 	}
 

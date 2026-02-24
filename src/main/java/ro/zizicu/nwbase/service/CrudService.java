@@ -14,5 +14,5 @@ public interface CrudService<Entity extends IdentityOwner<ID>, ID extends Serial
 	Entity load(ID id);
 	List<Entity> loadAll();
 	Entity create(Entity entity);
-	void delete(Entity entity);
+	void delete(ID id);
 }
