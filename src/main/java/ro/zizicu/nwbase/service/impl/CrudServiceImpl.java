@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.CrudRepository;
@@ -14,13 +15,18 @@ import ro.zizicu.nwbase.exceptions.EntityNotFoundException;
 import ro.zizicu.nwbase.service.CrudService;
 
 @Slf4j
+@RequiredArgsConstructor
 public class CrudServiceImpl<Entity extends IdentityOwner<ID>, 
 							  ID extends Serializable> 
 	implements CrudService<Entity, ID>
 
 {
 	@Autowired
-	protected CrudRepository<Entity, ID> repository;
+	private final CrudRepository<Entity, ID> repository;
+
+	protected CrudRepository<Entity, ID> getRepository() {
+		return repository;
+	}
 
 	@Override
 	public void delete(ID id) {
