@@ -15,12 +15,13 @@ import ro.zizicu.nwbase.service.NamedService;
 
 @Slf4j
 public abstract class NamedEntityController<Entity extends NamedIdentityOwner<ID>,
+									S extends NamedService<Entity, ID>,
 									ID extends Serializable> 
 			  extends CrudOperationsController<Entity, NamedService<Entity, ID>, ID> {
 
 
-	public NamedEntityController(NamedService<Entity, ID> namedService) {
-		super(namedService);
+	public NamedEntityController(S service) {
+		super(service);
 	}
 
 	@GetMapping(value = "/name/{name}")

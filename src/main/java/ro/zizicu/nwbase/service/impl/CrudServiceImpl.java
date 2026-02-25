@@ -16,7 +16,7 @@ import ro.zizicu.nwbase.service.CrudService;
 
 @Slf4j
 @RequiredArgsConstructor
-public class CrudServiceImpl<Entity extends IdentityOwner<ID>, 
+public abstract class CrudServiceImpl<Entity extends IdentityOwner<ID>,
 							  ID extends Serializable> 
 	implements CrudService<Entity, ID>
 
@@ -41,7 +41,7 @@ public class CrudServiceImpl<Entity extends IdentityOwner<ID>,
 	@Override
 	public Entity create(Entity entity) {
 		if(log.isInfoEnabled()) log.info("create {} id {}", entity.getClass().getName(), entity.getId());
-		return repository.save(entity);
+		return transform(repository.save(entity));
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class CrudServiceImpl<Entity extends IdentityOwner<ID>,
 		for(Entity e : repository.findAll())
 			entities.add(e);
 
-		return entities;
+		return entities.stream().map(this::transform).toList();
 	}
 
 	@Override
@@ -63,7 +63,9 @@ public class CrudServiceImpl<Entity extends IdentityOwner<ID>,
 			log.info("entity with id {} not found", id);
 			throw new EntityNotFoundException();
 		}
-		return entity.get();
+		return transform(entity.get());
 	}
+
+	protected abstract Entity transform(Entity e);
 
 }
