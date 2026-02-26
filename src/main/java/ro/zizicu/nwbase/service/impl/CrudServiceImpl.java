@@ -61,7 +61,7 @@ public abstract class CrudServiceImpl<Entity extends IdentityOwner<ID>,
 		Optional<Entity> entity = repository.findById(id);
 		if(entity.isEmpty()) {
 			log.info("entity with id {} not found", id);
-			throw new EntityNotFoundException();
+			throw new EntityNotFoundException("entity with id " + id + " not found");
 		}
 		return transform(entity.get());
 	}
