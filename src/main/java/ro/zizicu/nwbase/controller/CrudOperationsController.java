@@ -35,7 +35,7 @@ public abstract class CrudOperationsController<E extends IdentityOwner<ID>,
 	@GetMapping("/{id}")
 	public ResponseEntity<E> load(@PathVariable ID id) {
 		log.debug("load {}", id);
-		return ResponseEntity.ok(service.load(id)); // EntityNotFoundException handled globally
+		return ResponseEntity.ok(service.load(id));
 	}
 
 	@PostMapping
